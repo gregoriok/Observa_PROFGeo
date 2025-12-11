@@ -1,4 +1,3 @@
-# usuarios/forms.py
 from datetime import date
 
 from django import forms
@@ -41,14 +40,14 @@ class CadastroUsuarioForm(UserCreationForm):
                 area_atuacao=atuacao,
                 ano_ingresso=ingresso,
 
-                ativo_colaborador=False,
+                ativo_colaborador=True,
                 ano_referencia=date.today().year
             )
         return user
 
 
 class CoordenadorVinculoForm(forms.ModelForm):
-    # Campo para selecionar o usuário (PK/FK)
+
     usuario = forms.ModelChoiceField(
         queryset=Usuario.objects.filter(is_superuser=False),  # Exclui superusuários
         label="Vincular Usuário"
@@ -56,17 +55,13 @@ class CoordenadorVinculoForm(forms.ModelForm):
 
     class Meta:
         model = Coordenador
-        # Excluímos id_usuario porque ele será preenchido pelo campo 'usuario'
         fields = ('usuario', 'formacao', 'id_unidade', 'ano_vigencia', 'ativo_coordenador')
-        # Note que 'id_unidade' é o nome do campo FK no modelo
 
     def save(self, commit=True):
         usuario = self.cleaned_data.get('usuario')
 
-        # O campo PK/FK (id_usuario) será o usuário selecionado
         self.instance.id_usuario = usuario
 
-        # Verifica se o perfil já existe (para evitar erro de PK duplicada)
         if Coordenador.objects.filter(id_usuario=usuario).exists():
             raise ValidationError("Este usuário já possui um perfil de coordenador.")
 

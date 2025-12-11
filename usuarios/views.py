@@ -51,14 +51,11 @@ def perfil_usuario(request):
     """Exibe o perfil do usuário e atua como dashboard."""
     user = request.user
 
-    # 1. Obter Perfil de Cargo (Opcional, mas útil para mostrar status)
-    # Tenta obter o perfil de Coordenador
     try:
         perfil_coordenador = user.coordenador_profile
     except Exception:
         perfil_coordenador = None
 
-    # Tenta obter o perfil de Colaborador
     try:
         perfil_colaborador = user.colaborador_profile
     except Exception:
@@ -72,7 +69,7 @@ def perfil_usuario(request):
     return render(request, 'usuarios/perfil.html', context)
 
 
-@coordenador_required(redirect_url='perfil')  # Redireciona para o perfil se não for coordenador
+@coordenador_required(redirect_url='perfil')
 def gerenciar_aprovacoes(request):
     user = request.user
 
@@ -81,14 +78,12 @@ def gerenciar_aprovacoes(request):
         pendentes = Usuario.objects.filter(aprovado_coordenador=False)
         unidade_coordenada = None
     else:
-        # 1. Encontra a unidade que o Coordenador coordena
         try:
             unidade_coordenada = user.coordenador_profile.id_unidade
         except Exception:
             messages.error(request, "Você não está vinculado a nenhuma unidade para gerenciar aprovações.")
             return redirect('perfil')
 
-        # 2. Filtra usuários que são Colaboradores DAQUELA unidade e não estão aprovados
         pendentes = Usuario.objects.filter(
             aprovado_coordenador=False,
             colaborador_profile__id_unidade=unidade_coordenada
@@ -106,11 +101,8 @@ def gerenciar_aprovacoes(request):
 def aprovar_usuario(request, user_id):
     usuario_a_aprovar = get_object_or_404(Usuario, pk=user_id)
 
-    # Opcional: Adicionar lógica de segurança para garantir que o Coordenador só aprove
-    # usuários da SUA unidade (se não for Superusuário)
-
     usuario_a_aprovar.aprovado_coordenador = True
-    usuario_a_aprovar.ativo = True  # Ativa o usuário globalmente para permitir o login
+    usuario_a_aprovar.ativo = True
     usuario_a_aprovar.save()
 
     messages.success(request, f"O usuário {usuario_a_aprovar.nome} foi aprovado com sucesso e pode fazer login.")

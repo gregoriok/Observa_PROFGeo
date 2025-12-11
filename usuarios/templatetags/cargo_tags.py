@@ -11,7 +11,6 @@ def is_coordenador_filter(user):
     if user.is_superuser:
         return True
     try:
-        # Acessa o perfil via related_name
         return user.coordenador_profile.ativo_coordenador
     except Coordenador.DoesNotExist:
         return False
