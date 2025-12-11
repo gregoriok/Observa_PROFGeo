@@ -5,6 +5,10 @@ from app_unidade_associada.models import UnidadeAssociada
 import datetime
 
 
+def home_page(request):
+    """View simples para a página inicial."""
+    return render(request, 'home_page.html')
+
 def view_unidade_associada(request):
     """Lista todas as unidades e exibe os botões '+' e 'Lápis'."""
     unidades = UnidadeAssociada.objects.all().order_by('Nome_unidade')  # Ordena para melhor UX
