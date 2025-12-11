@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-log.txt
+.tox/
+.pytest_cache/
+.coverage
+.env
+# Django / Database
+db.sqlite3 # Se você estiver usando o SQLite em desenvolvimento
+
+# IDEs (PyCharm, VS Code, etc.)
+.idea/ # <-- Esta é a linha crucial para o PyCharm
+.vscode/
