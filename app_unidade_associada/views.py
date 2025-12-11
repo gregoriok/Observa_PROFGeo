@@ -1,8 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
 from app_unidade_associada.forms import UnidadeAssociadaForm
 from app_unidade_associada.models import UnidadeAssociada
 import datetime
+
+from usuarios.decorators import coordenador_required
 
 
 def home_page(request):
@@ -38,7 +41,8 @@ def create_unidade_associada(request):
     }
     return render(request, 'unidade_form.html', context)  # Reutiliza um template de formulário
 
-
+@login_required
+@coordenador_required(redirect_url='/unauthorized/')
 def update_unidade_associada(request, pk):
     """Lida com a edição de uma unidade existente."""
     # Garante que a unidade exista, senão retorna erro 404

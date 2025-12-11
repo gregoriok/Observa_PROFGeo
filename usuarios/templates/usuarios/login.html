@@ -1,0 +1,41 @@
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %}
+
+{% block title %}Login no Sistema{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow p-4 mt-5">
+            <h2 class="card-title text-center">Acessar o Observa-PROFGeo</h2>
+            <hr>
+            
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    Usuário ou senha inválidos. Por favor, tente novamente.
+                </div>
+            {% endif %}
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                {{ form|crispy }} 
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-success mt-3">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                </div>
+                
+                {% if next %}
+                    <input type="hidden" name="next" value="{{ next }}" />
+                {% endif %}
+            </form>
+            
+            <p class="mt-3 text-center">
+                Não tem uma conta? <a href="{% url 'cadastro' %}">Cadastre-se</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

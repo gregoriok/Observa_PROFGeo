@@ -12,3 +12,7 @@ class UnidadeAssociada(models.Model):
 
     class Meta:
         db_table = 'unidade_associada'
+
+    def __str__(self):
+        # Retorna o nome da unidade como a representação legível do objeto
+        return f"{self.Nome_unidade} - ({self.Municipio}/{self.Estado_UF})"

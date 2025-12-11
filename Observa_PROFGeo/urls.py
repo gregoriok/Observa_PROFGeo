@@ -20,6 +20,7 @@ from app_unidade_associada.views import home_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('unidades/', include('app_unidade_associada.urls'), name='create_unidade_associada'),
+    path('unidades/', include('app_unidade_associada.urls'), name='unidade_associada'),
     path('',home_page,name='home'),
+    path('usuarios/',include('usuarios.urls'),name='usuarios'),
 ]

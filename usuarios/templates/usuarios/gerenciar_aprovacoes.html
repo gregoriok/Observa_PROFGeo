@@ -1,0 +1,60 @@
+{% extends 'base.html' %} 
+
+{% block title %}Gerenciar Aprovações{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <h1 class="mb-4">{{ titulo }}</h1>
+        
+        {% if unidade %}
+            <p class="lead">Usuários pendentes de aprovação na unidade: <strong>{{ unidade }}</strong></p>
+        {% endif %}
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% if pendentes %}
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Unidade Desejada</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user_pendente in pendentes %}
+                <tr>
+                    <td>{{ user_pendente.nome }}</td>
+                    <td>{{ user_pendente.email }}</td>
+                    <td>{{ user_pendente.colaborador_profile.id_unidade.Nome_unidade }}</td>
+                    <td>
+                        <a href="{% url 'aprovar_usuario' user_id=user_pendente.pk %}" 
+                           class="btn btn-success btn-sm"
+                           onclick="return confirm('Tem certeza que deseja aprovar o cadastro de {{ user_pendente.nome }}? Ele terá acesso imediato ao sistema.');">
+                            <i class="fas fa-check"></i> Aprovar
+                        </a>
+                        </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="alert alert-info">
+            Nenhum cadastro pendente de aprovação no momento.
+        </div>
+        {% endif %}
+        
+        <p class="mt-4">
+            <a href="{% url 'perfil' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Voltar para o Perfil
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock content %}

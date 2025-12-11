@@ -1,0 +1,28 @@
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %} 
+{% block title %}Cadastro de Novo Usuário{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow p-4 mt-5">
+            <h2 class="card-title text-center">Registrar Novo Usuário</h2>
+            <hr>
+            <form method="post">
+                {% csrf_token %}
+                
+                {{ form|crispy }} 
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary mt-3">
+                        <i class="fas fa-user-plus"></i> Finalizar Cadastro
+                    </button>
+                </div>
+            </form>
+            <p class="mt-3 text-center">
+                Já tem uma conta? <a href="{% url 'login' %}">Faça Login</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

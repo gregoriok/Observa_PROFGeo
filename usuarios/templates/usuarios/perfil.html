@@ -1,0 +1,105 @@
+{% extends 'base.html' %} 
+{% load cargo_tags %}
+{% block title %}Meu Perfil{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="mb-4"><i class="fas fa-user-circle"></i> Meu Perfil</h1>
+        
+        {% if user.is_superuser or perfil_coordenador and perfil_coordenador.ativo_coordenador %}
+        <div class="alert alert-warning shadow-sm p-4 mb-4">
+            <h4><i class="fas fa-tasks"></i> Gerenciamento de Usuários</h4>
+
+            {% if user.is_superuser %}
+                <p>Ações de Superusuário disponíveis:</p>
+            {% else %}
+                <p>Ações de Coordenador disponíveis:</p>
+            {% endif %}
+
+            <a href="{% url 'gerenciar_aprovacoes' %}" class="btn btn-danger btn-lg">
+                <i class="fas fa-user-clock"></i> Cadastros Pendentes
+            </a>
+
+            {% if user.is_superuser %}
+                <a href="{% url 'vincular_cargos' %}" class="btn btn-warning btn-lg ms-3">
+                    <i class="fas fa-link"></i> Gerenciar Vincular Cargos
+                </a>
+                <a href="{% url 'admin:index' %}" class="btn btn-secondary btn-lg ms-3">
+                    <i class="fas fa-cogs"></i> Painel Django Admin
+                </a>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                Detalhes da Conta
+            </div>
+            <div class="card-body">
+                <p><strong>Nome:</strong> {{ user.nome }}</p>
+                <p><strong>E-mail (Login):</strong> {{ user.email }}</p>
+                <p><strong>Telefone:</strong> {{ user.telefone|default:"Não informado" }}</p>
+                <p><strong>CPF:</strong> {{ user.cpf|default:"Não informado" }}</p>
+                <p><strong>Membro desde:</strong> {{ user.data_cadastro|date:"d/m/Y" }}</p>
+                <p><strong>Status Global:</strong> 
+                    {% if user.ativo %}
+                        <span class="badge bg-success">Ativo no Sistema</span>
+                    {% else %}
+                        <span class="badge bg-danger">Inativo</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-info text-white">
+                        <i class="fas fa-user-tie"></i> Status Coordenador
+                    </div>
+                    <div class="card-body">
+                        {% if perfil_coordenador %}
+                            <p><strong>Situação:</strong> 
+                                {% if perfil_coordenador.ativo_coordenador %}
+                                    <span class="badge bg-success">Ativo</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inativo</span>
+                                {% endif %}
+                            </p>
+                            <p><strong>Unidade:</strong> {{ perfil_coordenador.id_unidade.titulo }}</p>
+                            <p><strong>Vigência:</strong> {{ perfil_coordenador.ano_vigencia }}</p>
+                            {% else %}
+                            <p class="text-muted">Nenhum perfil de Coordenador atribuído.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <i class="fas fa-users-cog"></i> Status Colaborador
+                    </div>
+                    <div class="card-body">
+                        {% if perfil_colaborador %}
+                            <p><strong>Situação:</strong> 
+                                {% if perfil_colaborador.ativo_colaborador %}
+                                    <span class="badge bg-success">Ativo</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inativo</span>
+                                {% endif %}
+                            </p>
+                            <p><strong>Unidade:</strong> {{ perfil_colaborador.id_unidade.titulo }}</p>
+                            <p><strong>Ano Ref.:</strong> {{ perfil_colaborador.ano_referencia }}</p>
+                        {% else %}
+                            <p class="text-muted">Nenhum perfil de Colaborador atribuído.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock content %}
